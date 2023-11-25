@@ -70,7 +70,9 @@ class Login(QWidget):
             line_opacity=.3,
         ).add_to(m)
         
-        self.marcerlist = [[20,31,"xyina","Это полная хуйня"],[40,15,"","Просто маркер"]]
+        self.ui.label_2.setWordWrap(True) 
+        self.ui.verticalScrollBar
+        self.marcerlist = [[20,31,"xyina","Это полная хуйня"],[40,15,"","Просто маркер"],[54.76860013987199948815032257698476314544677734375,31.99774693254099844352822401560842990875244140625,"Смарт Компресс","О компании\nНаколенники, голеностопы, напульсники, налокотники нашего производства — это не только обязательный атрибут для всех, кто занимается спортом и фитнесом, но и яркий аксессуар.\n\nПродукция изготавливается на передовом оборудовании с применением новейших технологий. Изделия ООО «Смарт Компресс» отличает способность адаптироваться к анатомическим пропорциям человека. Благодаря революционной технологии вязки, изделия растягиваются сразу в двух направлениях, чем достигается максимально комфортное прилегание материала к телу и надежная фиксация суставов."]]
         self.Marcers_create(m,self.marcerlist)
         
         data = io.BytesIO()
@@ -112,13 +114,10 @@ class Login(QWidget):
         
     def Marcers_create(self,m,data):
         for i in data:
-            iconMarker = BeautifyIcon(
-                        icon = "industry",
-                        text_color = "black")
             
-            image = 'https://github.com/Mazer1x/RussianGeography/blob/2f7ae986f7852ecbd93ccd1ce28499c9d7383718/src/industry-windows.png?raw=true'
+            image = 'https://site-assets.fontawesome.com/releases/v6.4.2/svgs/solid/industry-windows.svg'
 
-            iconLogo = folium.features.CustomIcon(icon_image= image,icon_size=(50,50)) 
+            iconLogo = folium.features.CustomIcon(icon_image=image,icon_size=(25,25)) 
             if len(i)>2 and len(i[2]) >0:
                 folium.Marker(location=(i[0],i[1]),tooltip=i[2],icon=iconLogo).add_to(m)
             else:
