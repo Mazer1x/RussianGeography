@@ -15,6 +15,7 @@ def resource_path(relative_path):
 
 class Backend(QtCore.QObject):
     valueChanged = QtCore.pyqtSignal(str)
+    
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -67,6 +68,9 @@ class Login(QWidget):
             fill_opacity=0.7,
             line_opacity=.3,
         ).add_to(m)
+        self.iconMarker = folium.features.CustomIcon(icon_image=open("src/industry-windows.png"),icon_size=(50,50))
+        
+        
         self.marcerlist = [[20,31,"xyina","Это полная хуйня"],[40,15,"","Просто маркер"]]
         self.Marcers_create(m,self.marcerlist)
         
@@ -110,9 +114,9 @@ class Login(QWidget):
     def Marcers_create(self,m,data):
         for i in data:
             if len(i)>2 and len(i[2]) >0:
-                folium.Marker(location=(i[0],i[1]),tooltip=i[2]).add_to(m)
+                folium.Marker(location=(i[0],i[1]),tooltip=i[2],icon=self.iconMarker).add_to(m)
             else:
-                folium.Marker(location=(i[0],i[1])).add_to(m)
+                folium.Marker(location=(i[0],i[1]),icon=self.iconMarker).add_to(m)
             
             
     @QtCore.pyqtSlot(str)
