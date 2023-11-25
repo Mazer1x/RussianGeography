@@ -1,12 +1,17 @@
-# webEngineView
-import sys
 from PyQt6.QtWidgets import QApplication, QWidget,QMainWindow
-from PyQt6 import QtCore, QtWebChannel
+from PyQt6 import QtCore, QtWebChannel,QtGui
 from src.form import Ui_MainWindow
-import folium
-import io
+import io,os,sys,json,folium
 import pandas as pd
-import json
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 class Backend(QtCore.QObject):
     valueChanged = QtCore.pyqtSignal(str)
@@ -35,6 +40,10 @@ class Login(QWidget):
         self.w = QMainWindow()  
         self.ui.setupUi(self.w) 
         self.w.show()
+        self.w.setWindowTitle("RussianGeography")
+        self.w.setWindowIcon(QtGui.QIcon(resource_path("src/industry-windows.ico")))
+        
+        self.icon = folium.Icon(icon="industry-window",prefix="fa")
         
         
         with open("src/russia.json", encoding="utf-8",) as f:
@@ -50,7 +59,7 @@ class Login(QWidget):
         
         folium.Choropleth(
             geo_data=self.state_geo,
-            name="choropleth",
+            name="Regions",
             data=state_data,
             columns=["State", "Unemployment"],
             key_on="feature.id",
@@ -58,8 +67,7 @@ class Login(QWidget):
             fill_opacity=0.7,
             line_opacity=.3,
         ).add_to(m)
-        self.marcerlist = [[20,31,"xyina"],[40,15]]
-        
+        self.marcerlist = [[20,31,"xyina","Это полная хуйня"],[40,15,"","Просто маркер"]]
         self.Marcers_create(m,self.marcerlist)
         
         data = io.BytesIO()
@@ -95,22 +103,23 @@ class Login(QWidget):
         
         self.channel = QtWebChannel.QWebChannel()
         self.channel.registerObject("backend", backend)
-        self.ui.webEngineView.page().setWebChannel(self.channel)
+        self.ui.webEngineView.page().setWebChannel(self.channel)    
         self.ui.webEngineView.setHtml('\n'.join(b))
         
         
     def Marcers_create(self,m,data):
         for i in data:
-            try:
+            if len(i)>2 and len(i[2]) >0:
                 folium.Marker(location=(i[0],i[1]),tooltip=i[2]).add_to(m)
-            except:
+            else:
                 folium.Marker(location=(i[0],i[1])).add_to(m)
             
             
     @QtCore.pyqtSlot(str)
     def onclickelement(self, value):
         if value[0] != 'A':
-            print(self.marcerlist[int(value)])
+            if len(self.marcerlist[int(value)])>3:
+                self.ui.label_2.setText(self.marcerlist[int(value)][3])
         else:
             for i in json.loads(self.state_geo)["features"]:
                 if i["id"] == value:
