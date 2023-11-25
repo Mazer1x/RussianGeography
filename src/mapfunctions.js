@@ -18,7 +18,7 @@ del = ()=>{
         number+=1;
     }, 70);
     
-    a = document.querySelectorAll('.leaflet-marker-pane img');
+    a = document.querySelectorAll('.leaflet-marker-pane div , .leaflet-marker-pane img');
     for(let i =0; i < a.length;i++){
         a[i].addEventListener("click", function(){
             try{

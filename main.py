@@ -3,6 +3,7 @@ from PyQt6 import QtCore, QtWebChannel,QtGui
 from src.form import Ui_MainWindow
 import io,os,sys,json,folium
 import pandas as pd
+from folium.plugins.beautify_icon import BeautifyIcon
 
 def resource_path(relative_path):
     try:
@@ -68,8 +69,6 @@ class Login(QWidget):
             fill_opacity=0.7,
             line_opacity=.3,
         ).add_to(m)
-        self.iconMarker = folium.features.CustomIcon(icon_image=open("src/industry-windows.png"),icon_size=(50,50))
-        
         
         self.marcerlist = [[20,31,"xyina","Это полная хуйня"],[40,15,"","Просто маркер"]]
         self.Marcers_create(m,self.marcerlist)
@@ -113,10 +112,17 @@ class Login(QWidget):
         
     def Marcers_create(self,m,data):
         for i in data:
+            iconMarker = BeautifyIcon(
+                        icon = "industry",
+                        text_color = "black")
+            
+            image = 'https://github.com/Mazer1x/RussianGeography/blob/2f7ae986f7852ecbd93ccd1ce28499c9d7383718/src/industry-windows.png?raw=true'
+
+            iconLogo = folium.features.CustomIcon(icon_image= image,icon_size=(50,50)) 
             if len(i)>2 and len(i[2]) >0:
-                folium.Marker(location=(i[0],i[1]),tooltip=i[2],icon=self.iconMarker).add_to(m)
+                folium.Marker(location=(i[0],i[1]),tooltip=i[2],icon=iconLogo).add_to(m)
             else:
-                folium.Marker(location=(i[0],i[1]),icon=self.iconMarker).add_to(m)
+                folium.Marker(location=(i[0],i[1]),icon=iconLogo).add_to(m)
             
             
     @QtCore.pyqtSlot(str)
