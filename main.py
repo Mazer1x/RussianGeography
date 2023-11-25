@@ -53,7 +53,7 @@ class Login(QWidget):
         
         with open("src/russia.csv", encoding="utf-8",) as f:
             state_data = pd.read_csv(io.StringIO(f.read()))
-        print(state_data["State"][0],state_data["Unemployment"][0])
+        # print(state_data["State"][0],state_data["Unemployment"][0])
         
         m = folium.Map(
             zoom_start=17
@@ -70,10 +70,10 @@ class Login(QWidget):
             line_opacity=.3,
         ).add_to(m)
         
-        self.ui.label_2.setWordWrap(True) 
-        self.ui.verticalScrollBar
-        self.marcerlist = [[20,31,"xyina","Это полная хуйня"],[40,15,"","Просто маркер"],[54.76860013987199948815032257698476314544677734375,31.99774693254099844352822401560842990875244140625,"Смарт Компресс","О компании\nНаколенники, голеностопы, напульсники, налокотники нашего производства — это не только обязательный атрибут для всех, кто занимается спортом и фитнесом, но и яркий аксессуар.\n\nПродукция изготавливается на передовом оборудовании с применением новейших технологий. Изделия ООО «Смарт Компресс» отличает способность адаптироваться к анатомическим пропорциям человека. Благодаря революционной технологии вязки, изделия растягиваются сразу в двух направлениях, чем достигается максимально комфортное прилегание материала к телу и надежная фиксация суставов."]]
-        self.Marcers_create(m,self.marcerlist)
+        
+        with open("src/data.json", encoding="utf-8",) as f:
+            self.marcerlist =json.loads( f.read())
+        self.Marcers_create(m,self.marcerlist["data"])
         
         data = io.BytesIO()
         
@@ -127,8 +127,8 @@ class Login(QWidget):
     @QtCore.pyqtSlot(str)
     def onclickelement(self, value):
         if value[0] != 'A':
-            if len(self.marcerlist[int(value)])>3:
-                self.ui.label_2.setText(self.marcerlist[int(value)][3])
+            if len(self.marcerlist["data"][int(value)])>3:
+                self.ui.label_2.setPlainText(self.marcerlist["data"][int(value)][3])
         else:
             for i in json.loads(self.state_geo)["features"]:
                 if i["id"] == value:
